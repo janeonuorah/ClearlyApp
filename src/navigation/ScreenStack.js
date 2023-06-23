@@ -68,6 +68,18 @@ const OnboardingStack = () => {
       <Stack.Screen name="HomeScreen" component={BottomTabsStack} />  
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
+      <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
+      <Stack.Screen name="ResetPassword1" component={ResetPassword1} />
+      <Stack.Screen name="ResetPassword2" component={ResetPassword2} />
+      <Stack.Screen name="PasswordChanged" component={PasswordChanged} />
+      <Stack.Screen name="TextToSpeechScreen" component={TextToSpeech} />
+      <Stack.Screen name="SpeechToTextScreen" component={SpeechToText} />
+      <Stack.Screen name="CallsScreen" component={Calls} />
+      <Stack.Screen name="ChatScreen" component={ChatListScreen} />
+      <Stack.Screen name="SignLanguageTranscriptionScreen" component={SignLanguageTranscription} />
+      <Stack.Screen name="MeetWithTranslatorScreen" component={MeetWithTranslator} />
+      <Stack.Screen name="BasicSignLanguageScreen" component={BasicSignLanguage} />
+      <Stack.Screen name="CommunityScreen" component={Community} /> 
     </Stack.Navigator>
   );
 };

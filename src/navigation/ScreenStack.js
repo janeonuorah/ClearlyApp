@@ -18,6 +18,9 @@ import SignLanguageTranscription from '../screens/SignLanguageTranscription';
 import MeetWithTranslator from '../screens/MeetWithTranslator';
 import BasicSignLanguage from '../screens/BasicSignLanguage';
 import Community from '../screens/Community';
+import PersonalProfile from '../screens/PersonalProfile';
+import ResetPassword1 from '../screens/ResetPassword1';
+import ResetPassword2 from '../screens/ResetPassword2';
 
 const Stack = createStackNavigator();
 
@@ -80,7 +83,10 @@ const MainStack = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name='LogIn' component={LogIn} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="ResetPassword1" component={ResetPassword1} />
+      <Stack.Screen name="ResetPassword2" component={ResetPassword2} />
       <Stack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
       <Stack.Screen name="HomeScreen" component={BottomTabsStack} />
       <Stack.Screen name="TextToSpeechScreen" component={TextToSpeech} />

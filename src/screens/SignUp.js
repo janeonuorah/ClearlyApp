@@ -45,6 +45,10 @@ const SignUpScreen = () => {
         navigation.navigate('LogIn')
     }
 
+    const onSendOTPPress = () => {
+        navigation.navigate('PasswordRecoveryOTPScreen')
+    }
+
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.primary }}>
             <View style={{ paddingHorizontal: 5 }}>
@@ -110,13 +114,13 @@ const SignUpScreen = () => {
                         autoFocus
                     />
 
-                    <Pressable
+                    <TouchableOpacity
                         style={styles.button}
-                        onPress={() => OnPress()}
+                        onPress={() => { OnPress(), onSendOTPPress() }}
                         android_ripple="red"
                     >
                         <Text style={styles.text1}>Send OTP</Text>
-                    </Pressable>
+                    </TouchableOpacity>
 
                     <View style={{ marginTop: 20 }}>
                         <Text
@@ -134,15 +138,9 @@ const SignUpScreen = () => {
                 <View
                     style={{
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: 27,
-                        marginBottom: 30
+                        marginVertical: 30
                     }}>
-                    <TouchableOpacity style={{ color: COLORS.white, marginBottom: 10 }}>
-                        <Text style={{ color: COLORS.white, fontWeight: 'bold' }}>Continue</Text>
-                    </TouchableOpacity>
-                    <Text style={{ color: 'white' }}>or</Text>
-
+                    <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>or</Text>
                 </View>
 
                 <View

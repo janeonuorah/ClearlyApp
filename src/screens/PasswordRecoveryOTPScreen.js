@@ -16,14 +16,14 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 // import { KeyboardAccessoryView } from 'react-native-keyboard-accessory'
 
-import { height, COLORS } from '../components/styles';
+import { height, COLORS, width } from '../components/styles';
 
 const OTPScreen = () => {
     const [otp, setOtp] = useState('');
     const [keyboardOffset, setKeyboardOffset] = useState(0)
 
     const handleOTPSubmit = () => {
-        // Implement your logic to verify the entered OTP
+        // Implement logic to verify the entered OTP
         console.log('Entered OTP:', otp);
     };
 
@@ -36,6 +36,10 @@ const OTPScreen = () => {
     {/* function to handle back button press*/ }
     const handleBackButtonPress = () => {
         navigation.goBack()
+    }
+
+    const onConfirmPress = () => {
+        navigation.navigate('PersonalProfile')
     }
 
 
@@ -104,45 +108,53 @@ const OTPScreen = () => {
                 <View style={{ alignItems: 'center', marginTop: 30 }}>
                     <View>
                         <Text style={styles.resetPassword}>Reset Password?</Text>
-                        <Text style={styles.inputText}>Input the 6 digit code sent to your phone number/Email</Text>
+                        <Text style={styles.inputText}>Enter the 6 digits code we sent to your number</Text>
                     </View>
                 </View>
-
 
                 {/* <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={{ flex: 1 }}
                     keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50}> */}
 
-                    <OTPInputView
-                        style={[styles.otpInput, {marginBottom: keyboardOffset}]}
-                        pinCount={6}
-                        code={otp}
-                        onCodeChanged={code => setOtp(code)}
-                        autoFocusOnLoad
-                        codeInputFieldStyle={styles.otpInputField}
-                        codeInputHighlightStyle={styles.otpInputHighlight}
-                        onCodeFilled={handleOTPSubmit}
-                    />
-                    {/* <KeyboardAccessoryView
+                <OTPInputView
+                    style={[styles.otpInput, { marginBottom: keyboardOffset }]}
+                    pinCount={6}
+                    code={otp}
+                    onCodeChanged={code => setOtp(code)}
+                    autoFocusOnLoad
+                    codeInputFieldStyle={styles.otpInputField}
+                    codeInputHighlightStyle={styles.otpInputHighlight}
+                    onCodeFilled={handleOTPSubmit}
+                />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <Text>Didn't receive code? Click</Text>
+                    <TouchableOpacity>
+                        <Text style={{color: COLORS.primary}}>
+                            Resend Code
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                {/* <KeyboardAccessoryView
                         alwaysVisible
                         hideBorder
                         style={styles.accessoryContainer}> */}
-                        {/* <View style={styles.doneButtonContainer}>
+                {/* <View style={styles.doneButtonContainer}>
                             <TouchableOpacity onPress={handleDoneButtonPress}>
                                 <Text style={styles.doneButton}>Done</Text>
                             </TouchableOpacity>
                         </View> */}
-                    {/* </KeyboardAccessoryView> */}
+                {/* </KeyboardAccessoryView> */}
 
 
-                    {/* Next button */}
-                    <TouchableOpacity
-                        style={styles.nextContainer}
-                    // onPress={handleOTPSubmit}
-                    >
-                        <Text style={styles.nextText}>Next</Text>
-                    </TouchableOpacity>
+                {/* Next button */}
+                <TouchableOpacity
+                    style={styles.nextContainer}
+                    onPress={() => { handleOTPSubmit(), onConfirmPress() }}
+                >
+                    <Text style={styles.nextText}>Confirm</Text>
+                </TouchableOpacity>
                 {/* </KeyboardAvoidingView> */}
 
 
@@ -169,7 +181,7 @@ const styles = StyleSheet.create({
     },
 
     otpInput: {
-        width: '80%',
+        width: width * 0.8,
         height: 100,
         alignSelf: 'center',
         marginTop: 10

@@ -30,7 +30,7 @@ const ForgotPassword = () => {
 
     {/* function to handle Next button press depending on user's choice*/ }
     const onNextButtonPress = () => {
-        navigation.navigate('PasswordRecoveryOTPScreen')
+        navigation.navigate('ResetPassword1')
     }
 
     return (
@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
         borderColor: '#80CAFF',
         borderRadius: 5,
         marginTop: 80,
-        paddingHorizontal: 120,
         paddingVertical: 10,
         backgroundColor: COLORS.primary,
         marginHorizontal: 50,

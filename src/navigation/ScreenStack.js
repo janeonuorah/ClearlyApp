@@ -6,7 +6,7 @@ import OnboardingScreen from '../screens/Onboarding1';
 import LogIn from '../screens/LogIn';
 import SignUpScreen from '../screens/SignUp';
 import ForgotPassword from '../screens/ForgotPassword';
-import OTPScreen from '../screens/PasswordRecoveryOTPScreen';
+import OTPScreen from '../screens/OTPScreen';
 
 import BottomTabs from './BottomTabs';
 import HomeScreen from '../screens/HomeScreen';
@@ -21,6 +21,7 @@ import Community from '../screens/Community';
 import PersonalProfile from '../screens/PersonalProfile';
 import ResetPassword1 from '../screens/ResetPassword1';
 import ResetPassword2 from '../screens/ResetPassword2';
+import PasswordChanged from '../screens/PasswordChanged';
 
 const Stack = createStackNavigator();
 
@@ -88,6 +89,7 @@ const MainStack = () => {
       <Stack.Screen name="ResetPassword1" component={ResetPassword1} />
       <Stack.Screen name="ResetPassword2" component={ResetPassword2} />
       <Stack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
+      <Stack.Screen name="PasswordChanged" component={PasswordChanged} />
       <Stack.Screen name="HomeScreen" component={BottomTabsStack} />
       <Stack.Screen name="TextToSpeechScreen" component={TextToSpeech} />
       <Stack.Screen name="SpeechToTextScreen" component={SpeechToText} />

@@ -86,7 +86,7 @@ const ResetPassword2 = () => {
                     backgroundColor: COLORS.primary,
                     marginHorizontal: 50,
                 }}
-                onPress={() => navigation.navigate('ResetPassword2')}
+                onPress={() => navigation.navigate('PasswordChanged')}
             >
                 <Text
                     style={{

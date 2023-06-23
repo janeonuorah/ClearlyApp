@@ -64,7 +64,7 @@ const BottomTabs = () => {
                 }
             />
 
-            <Tab.Screen name="ChatScreen"
+            <Tab.Screen name="Chat"
                 component={ChatListScreen}
                 options={{
                     headerShown: false,

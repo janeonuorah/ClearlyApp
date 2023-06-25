@@ -107,7 +107,6 @@ const OTPScreen = () => {
                 {/* reset password header */}
                 <View style={{ alignItems: 'center', marginTop: 30 }}>
                     <View>
-                        <Text style={styles.resetPassword}>Reset Password?</Text>
                         <Text style={styles.inputText}>Enter the 6 digits code we sent to your number</Text>
                     </View>
                 </View>

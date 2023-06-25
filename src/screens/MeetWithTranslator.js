@@ -13,7 +13,7 @@ const MeetWithTranslator = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.primary }}>
       <View style={styles.container}>
         <Icon
           name="arrow-left"
@@ -61,6 +61,32 @@ const MeetWithTranslator = () => {
             />
           </TouchableOpacity>
         </View>
+      </View>
+
+      <View style={{ backgroundColor: COLORS.white, height: height * 0.50 }}>
+        <TouchableOpacity
+          style={{
+            alignItems: 'center',
+            borderWidth: 0.5,
+            borderColor: '#80CAFF',
+            borderRadius: 5,
+            marginTop: height * 0.35,
+            paddingVertical: 10,
+            backgroundColor: COLORS.primary,
+            marginHorizontal: 70,
+          }}
+          // onPress={() => navigation.navigate()}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: '500',
+              color: COLORS.white,
+            }}
+          >
+            Next
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

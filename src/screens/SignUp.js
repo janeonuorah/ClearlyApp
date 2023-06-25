@@ -42,7 +42,7 @@ const SignUpScreen = () => {
     const navigation = useNavigation()
 
     const backButton = () => {
-        navigation.navigate('LogIn')
+        navigation.goBack()
     }
 
     const onSendOTPPress = () => {

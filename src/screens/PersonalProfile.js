@@ -18,6 +18,7 @@ const PersonalProfile = ({ navigation }) => {
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [password_confirmation, setPassword_Confirmation] = useState('');
     const [agreeTerms, setAgreeTerms] = useState(false);
 
     const handleFirstNameChange = (text) => {
@@ -44,6 +45,10 @@ const PersonalProfile = ({ navigation }) => {
         setPassword(text);
     };
 
+    const handlePasswordConfirmationChange = (text) => {
+        setPassword_Confirmation(text);
+    };
+
     const handleCheckboxChange = () => {
         setAgreeTerms(!agreeTerms);
     };
@@ -58,17 +63,16 @@ const PersonalProfile = ({ navigation }) => {
             style={{
                 backgroundColor: COLORS.white,
                 flex: 1,
-                justifyContent: 'center',
             }}
         >
             <View>
                 <Icon
                     name="arrow-left"
-                    onPress={() => navigation.navigate('SignUp')}
+                    onPress={() => navigation.goBack()}
                     style={{
                         fontSize: 32,
                         marginLeft: 10,
-                        marginTop: 30,
+                        marginTop: 10,
                         color: COLORS.black,
                         fontWeight: 'bold'
                     }} />
@@ -123,6 +127,13 @@ const PersonalProfile = ({ navigation }) => {
                     onChangeText={handlePasswordChange}
                     style={styles.textInput}
                 />
+                <TextInput
+                    placeholder="Confirm Password"
+                    secureTextEntry
+                    value={password_confirmation}
+                    onChangeText={handlePasswordConfirmationChange}
+                    style={styles.textInput}
+                />
                 <View
                     style={{
                         flexDirection: 'row',
@@ -158,6 +169,7 @@ const PersonalProfile = ({ navigation }) => {
                         }} />
                 </View>
             </View>
+
         </SafeAreaView>
     );
 }

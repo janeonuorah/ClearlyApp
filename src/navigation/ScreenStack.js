@@ -9,7 +9,6 @@ import ForgotPassword from '../screens/ForgotPassword';
 import OTPScreen from '../screens/OTPScreen';
 
 import BottomTabs from './BottomTabs';
-import HomeScreen from '../screens/HomeScreen';
 import TextToSpeech from '../screens/TextToSpeech';
 import SpeechToText from '../screens/SpeechToText';
 import Calls from '../screens/VideoConference';
@@ -22,6 +21,7 @@ import PersonalProfile from '../screens/PersonalProfile';
 import ResetPassword1 from '../screens/ResetPassword1';
 import ResetPassword2 from '../screens/ResetPassword2';
 import PasswordChanged from '../screens/PasswordChanged';
+import HomeScreen from '../screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -35,7 +35,7 @@ const ScreenStack = () => {
         setIsAppFirstLaunched(true);
         AsyncStorage.setItem('isAppFirstLaunched', 'false');
       } else {
-        setIsAppFirstLaunched(false);
+        setIsAppFirstLaunched(true);
       }
     };
 
@@ -43,7 +43,7 @@ const ScreenStack = () => {
   }, []);
 
   if (isAppFirstLaunched === null) {
-    return null; //insert loading indicator
+    return null; // Insert loading indicator
   }
 
   return (
@@ -51,58 +51,46 @@ const ScreenStack = () => {
       {isAppFirstLaunched ? (
         <Stack.Screen name="Onboarding" component={OnboardingStack} />
       ) : (
-        <Stack.Screen name='Main' component={MainStack} />
-        // <Stack.Screen name='LogIn' component={LogIn} />
+        <Stack.Screen name="Main" component={MainStack} />
       )}
     </Stack.Navigator>
   );
 };
 
-//contains authentication screens: onboarding, login, signup, forgot password etc
+const AuthStack = createStackNavigator();
+
+// Contains authentication screens: onboarding, login, signup, forgot password, etc.
 const OnboardingStack = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-      <Stack.Screen name='LogIn' component={LogIn} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="HomeScreen" component={BottomTabsStack} />  
-      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-      <Stack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
+    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+      <AuthStack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+      <AuthStack.Screen name="LogIn" component={LogIn} />
+      <AuthStack.Screen name="HomeScreen" component={HomeScreen} />
+      <AuthStack.Screen name="SignUp" component={SignUpScreen} />
+      <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <AuthStack.Screen name="ResetPassword1" component={ResetPassword1} />
+      <AuthStack.Screen name="ResetPassword2" component={ResetPassword2} />
+      <AuthStack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
+      <AuthStack.Screen name="PasswordChanged" component={PasswordChanged} />
       <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
-      <Stack.Screen name="ResetPassword1" component={ResetPassword1} />
-      <Stack.Screen name="ResetPassword2" component={ResetPassword2} />
-      <Stack.Screen name="PasswordChanged" component={PasswordChanged} />
-      <Stack.Screen name="TextToSpeechScreen" component={TextToSpeech} />
-      <Stack.Screen name="SpeechToTextScreen" component={SpeechToText} />
-      <Stack.Screen name="CallsScreen" component={Calls} />
-      <Stack.Screen name="ChatScreen" component={ChatListScreen} />
-      <Stack.Screen name="SignLanguageTranscriptionScreen" component={SignLanguageTranscription} />
-      <Stack.Screen name="MeetWithTranslatorScreen" component={MeetWithTranslator} />
-      <Stack.Screen name="BasicSignLanguageScreen" component={BasicSignLanguage} />
-      <Stack.Screen name="CommunityScreen" component={Community} /> 
-    </Stack.Navigator>
+    </AuthStack.Navigator>
   );
 };
 
-//contains other screens in the app as well as the bottom tabs
- const BottomTabsStack = () => {
-   return (
-     <BottomTabs />
-   );
- };
-
+// Contains other screens in the app as well as the bottom tabs
 const MainStack = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name='LogIn' component={LogIn} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="LogIn" component={LogIn} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="BottomTabs" component={BottomTabs} />
       <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ResetPassword1" component={ResetPassword1} />
       <Stack.Screen name="ResetPassword2" component={ResetPassword2} />
       <Stack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
       <Stack.Screen name="PasswordChanged" component={PasswordChanged} />
-      <Stack.Screen name="HomeScreen" component={BottomTabsStack} />
       <Stack.Screen name="TextToSpeechScreen" component={TextToSpeech} />
       <Stack.Screen name="SpeechToTextScreen" component={SpeechToText} />
       <Stack.Screen name="CallsScreen" component={Calls} />
@@ -110,9 +98,9 @@ const MainStack = () => {
       <Stack.Screen name="SignLanguageTranscriptionScreen" component={SignLanguageTranscription} />
       <Stack.Screen name="MeetWithTranslatorScreen" component={MeetWithTranslator} />
       <Stack.Screen name="BasicSignLanguageScreen" component={BasicSignLanguage} />
-      <Stack.Screen name="CommunityScreen" component={Community} /> 
+      <Stack.Screen name="CommunityScreen" component={Community} />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
 export default ScreenStack;

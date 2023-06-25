@@ -79,7 +79,7 @@ const PasswordChanged = () => {
                     paddingHorizontal: 50,
                     backgroundColor: COLORS.primary,
                 }}
-                onPress={() => navigation.navigate('HomeScreen')}
+                onPress={() => navigation.navigate('LogIn')}
             >
                 <Text
                     style={{

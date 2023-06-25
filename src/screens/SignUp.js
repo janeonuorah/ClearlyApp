@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     Text,
     View,
     Alert,
-    Pressable,
+    TextInput,
     SafeAreaView,
     Image,
     TouchableOpacity,
@@ -18,6 +18,8 @@ import { useNavigation } from '@react-navigation/native';
 const SignUpScreen = () => {
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const phoneInput = React.useRef(null);
+    const [email, setEmail] = useState('')
+
 
     const OnPress = () => {
         if (phoneNumber.length !== 0) {
@@ -114,6 +116,22 @@ const SignUpScreen = () => {
                         autoFocus
                     />
 
+                    <View style={styles.input}>
+                        <Icon name="email-outline" style={styles.icon} />
+                        <TextInput
+                            placeholder="Enter your email address"
+                            autoCorrect={false}
+                            keyboardType='email-address'
+                            value={email}
+                            onChangeText={setEmail}
+                            style={{
+                                flex: 1,
+                                paddingHorizontal: 10,
+                                fontSize: 17
+                            }}
+                        />
+                    </View>
+
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() => { OnPress(), onSendOTPPress() }}
@@ -129,7 +147,7 @@ const SignUpScreen = () => {
                                 width: 350,
                                 fontSize: 15,
                             }}>
-                            A code will be sent to your registered number to verify
+                            A code will be sent to your email to verify
                             your account and also to recover your password
                         </Text>
                     </View>
@@ -236,7 +254,27 @@ const styles = StyleSheet.create({
         gap: 30,
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+
+    input: {
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: COLORS.white,
+        paddingHorizontal: 10,
+        marginTop: 30,
+        backgroundColor: COLORS.white,
+        alignItems: 'center',
+        width: width * 0.90,
+        height: height * 0.05,
+        borderRadius: 10,
+        flexDirection: 'row',
+    },
+
+    icon: {
+        fontSize: 22,
+        color: 'grey',
+        marginRight: 5
+    },
 
 });
 

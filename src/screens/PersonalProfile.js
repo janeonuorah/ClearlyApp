@@ -10,6 +10,7 @@ import {
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS, height, width } from '../components/styles';
+import PersonalProfileInputs from '../components/PersonalProfileInputs';
 
 const PersonalProfile = ({ navigation }) => {
     const [firstName, setFirstName] = useState('');
@@ -20,34 +21,6 @@ const PersonalProfile = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [password_confirmation, setPassword_Confirmation] = useState('');
     const [agreeTerms, setAgreeTerms] = useState(false);
-
-    const handleFirstNameChange = (text) => {
-        setFirstName(text);
-    };
-
-    const handleLastNameChange = (text) => {
-        setLastName(text);
-    };
-
-    const handleBirthdateChange = (text) => {
-        setBirthdate(text);
-    };
-
-    const handleCountryChange = (text) => {
-        setCountry(text);
-    };
-
-    const handleEmailChange = (text) => {
-        setEmail(text);
-    };
-
-    const handlePasswordChange = (text) => {
-        setPassword(text);
-    };
-
-    const handlePasswordConfirmationChange = (text) => {
-        setPassword_Confirmation(text);
-    };
 
     const handleCheckboxChange = () => {
         setAgreeTerms(!agreeTerms);
@@ -90,50 +63,48 @@ const PersonalProfile = ({ navigation }) => {
                 </Text>
             </View>
             <View>
-                <TextInput
-                    placeholder="First Name"
-                    value={firstName}
-                    onChangeText={handleFirstNameChange}
-                    style={styles.textInput}
+                <PersonalProfileInputs 
+                placeholder='First Name'
+                value= {firstName}
+                setValue={setFirstName}
                 />
-                <TextInput
-                    placeholder="Last Name                                        Other Name"
-                    value={lastName}
-                    onChangeText={handleLastNameChange}
-                    style={styles.textInput}
+               
+                <PersonalProfileInputs 
+                placeholder='Last Name                                     Other Names'
+                value= {lastName}
+                setValue={setLastName}
                 />
-                <TextInput
-                    placeholder="Birth Date (mm/dd/yyyy)"
-                    value={birthdate}
-                    onChangeText={handleBirthdateChange}
-                    style={styles.textInput}
+               
+                <PersonalProfileInputs 
+                placeholder='Birth Date (mm/dd/yyyy)'
+                value= {birthdate}
+                setValue={setBirthdate}
                 />
-                <TextInput
-                    placeholder="Country"
-                    value={country}
-                    onChangeText={handleCountryChange}
-                    style={styles.textInput}
+               
+                <PersonalProfileInputs 
+                placeholder='Country'
+                value= {country}
+                setValue={setCountry}
                 />
-                <TextInput
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={handleEmailChange}
-                    style={styles.textInput}
+               
+                <PersonalProfileInputs 
+                placeholder='Email'
+                value= {email}
+               setValue={setEmail}
                 />
-                <TextInput
-                    placeholder="Password"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={handlePasswordChange}
-                    style={styles.textInput}
+               
+                <PersonalProfileInputs 
+                placeholder='Password'
+                value= {password}
+                setValue={setPassword}
                 />
-                <TextInput
-                    placeholder="Confirm Password"
-                    secureTextEntry
-                    value={password_confirmation}
-                    onChangeText={handlePasswordConfirmationChange}
-                    style={styles.textInput}
+               
+                <PersonalProfileInputs 
+                placeholder='Confirm Password'
+                value= {password_confirmation}
+                setValue={setPassword_Confirmation}
                 />
+               
                 <View
                     style={{
                         flexDirection: 'row',

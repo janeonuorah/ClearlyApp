@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { height, COLORS } from '../components/styles';
+import { height, COLORS, width } from '../components/styles';
 import LoginButton from '../components/loginButtons';
 import { useNavigation } from '@react-navigation/native';
 
@@ -169,7 +169,7 @@ const LogIn = ({ error }) => {
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                     <View style={{
                         flexDirection: 'row',
-                        marginRight: 70,
+                        marginRight: 90,
                     }}
                     >
                         <Icon
@@ -237,8 +237,9 @@ const styles = StyleSheet.create({
         marginTop: 30,
         backgroundColor: COLORS.white,
         alignItems: 'center',
-        width: '80%',
-        height: '6%',
+        width: width * 0.80,
+        height: height * 0.05,
+        borderRadius: 10,
         flexDirection: 'row',
     },
 

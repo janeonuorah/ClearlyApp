@@ -22,8 +22,9 @@ import PersonalProfile from '../screens/PersonalProfile';
 import ResetPassword1 from '../screens/ResetPassword1';
 import ResetPassword2 from '../screens/ResetPassword2';
 import PasswordChanged from '../screens/PasswordChanged';
-import HomeScreen from '../screens/HomeScreen';
 import Settings from '../screens/Settings';
+import WithFacebook from '../screens/WithFacebook';
+import WithGoogle from '../screens/WithGoogle';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +80,8 @@ const OnboardingStack = () => {
       <AuthStack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
       <AuthStack.Screen name="PasswordChanged" component={PasswordChanged} />
       <AuthStack.Screen name="PersonalProfile" component={PersonalProfile} />
+      <AuthStack.Screen name="WithFacebook" component={WithFacebook} />
+      <AuthStack.Screen name="WithGoogle" component={WithGoogle} />
     </AuthStack.Navigator>
   );
 };
@@ -95,6 +98,8 @@ const NoOnboardingStack = () => {
       <Stack.Screen name="PasswordRecoveryOTPScreen" component={OTPScreen} />
       <Stack.Screen name="PasswordChanged" component={PasswordChanged} />
       <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
+      <Stack.Screen name="WithFacebook" component={WithFacebook} />
+      <Stack.Screen name="WithGoogle" component={WithGoogle} />
     </Stack.Navigator>
   )
 }
@@ -120,6 +125,8 @@ const MainStack = () => {
       <Stack.Screen name="BasicSignLanguageScreen" component={BasicSignLanguage} />
       <Stack.Screen name="CommunityScreen" component={Community} />
       <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="WithFacebook" component={WithFacebook} />
+      <Stack.Screen name="WithGoogle" component={WithGoogle} />
     </Stack.Navigator>
     
   );

@@ -169,32 +169,38 @@ const SignUpScreen = () => {
                         gap: 5,
                     }}
                 >
-                    <View
+                    <TouchableOpacity
                         style={styles.continueContainers}>
                         <Image
                             resizeMode='contain'
                             source={require('../Images/gmail.png')}
                         />
                         <Text style={styles.continueTexts}> Continue with Email</Text>
-                    </View>
-                    <View
-                        style={styles.continueContainers}>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.continueContainers}
+                        onPress={() => navigation.navigate('WithFacebook')}
+                    >
                         <Image
                             resizeMode='contain'
                             source={require('../Images/facebook.png')}
                             style={{ marginLeft: 30 }}
                         />
                         <Text style={styles.continueTexts}> Continue with Facebook</Text>
-                    </View>
-                    <View
-                        style={styles.continueContainers}>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.continueContainers}
+                        onPress={() => navigation.navigate('WithGoogle')}
+                    >
                         <Image
                             resizeMode='contain'
                             source={require('../Images/google.png')}
                             style={{ marginLeft: 10 }}
                         />
                         <Text style={styles.continueTexts}> Continue with Google</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
                 <View>

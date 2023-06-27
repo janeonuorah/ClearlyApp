@@ -70,7 +70,7 @@ const LogIn = ({ error }) => {
     }
 
     const onLoginPress = () => {
-        navigation.navigate('HomeScreen')
+        navigation.navigate('HomeScreenAlso')
     }
 
     // function to handle clearing of password one charcter at a time
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
 
     icon: {
         fontSize: 22,
-        color: 'grey',
+        color: COLORS.grey,
         marginRight: 5
     },
 

@@ -1,7 +1,7 @@
 import { View, TextInput, StyleSheet } from 'react-native'
 import React from 'react'
 
-const PersonalProfileInputs = ({value, setValue, placeholder }) => {
+const PersonalProfileInputs = ({value, setValue, placeholder, secureTextEntry  }) => {
     return (
         <View>
             <TextInput
@@ -9,6 +9,7 @@ const PersonalProfileInputs = ({value, setValue, placeholder }) => {
                 value={value}
                 onChangeText={setValue}
                 style={styles.textInput}
+                secureTextEntry = {secureTextEntry}
             />
         </View>
     )

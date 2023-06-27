@@ -12,11 +12,6 @@ const LoginButton = ({ onLoginPress }) => {
 
     const navigation = useNavigation()
 
-    // function to navigate to homescreen from login 
-    const onHomePress = () => {
-        navigation.navigate('HomeScreen')
-    }
-
     // function to navigate to signup screen from login
     const onSignUpPress = () => {
         navigation.navigate('SignUp')
@@ -24,7 +19,7 @@ const LoginButton = ({ onLoginPress }) => {
 
     return (
         <View >
-            <TouchableOpacity style={styles.container} onPress={() => { onLoginPress(); onHomePress() }}>
+            <TouchableOpacity style={styles.container} onPress={onLoginPress}>
                 <Text style={styles.text}>Log in</Text>
             </TouchableOpacity>
 

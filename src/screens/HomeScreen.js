@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { COLORS, height } from '../components/styles';
 import { HomeScreenContent } from '../components/HomeScreenContent';
-import  HomeScreenHeader  from '../components/HomeScreenheader';
+import HomeScreenHeader from '../components/HomeScreenheader';
 
 const HomeScreen = () => {
     return (
@@ -20,7 +20,7 @@ const HomeScreen = () => {
                 }}
             >
 
-               <HomeScreenHeader/>
+                <HomeScreenHeader />
 
                 <HomeScreenContent />
 

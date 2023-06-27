@@ -28,7 +28,7 @@ const PersonalProfile = ({ navigation }) => {
 
     const handleSubmit = () => {
         // Handle form submission with form data
-        navigation.navigate('HomeScreen')
+        navigation.navigate('LogIn')
     };
 
     return (
@@ -97,12 +97,14 @@ const PersonalProfile = ({ navigation }) => {
                 placeholder='Password'
                 value= {password}
                 setValue={setPassword}
+                secureTextEntry
                 />
                
                 <PersonalProfileInputs 
                 placeholder='Confirm Password'
                 value= {password_confirmation}
                 setValue={setPassword_Confirmation}
+                secureTextEntry
                 />
                
                 <View

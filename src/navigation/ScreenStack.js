@@ -49,7 +49,7 @@ const ScreenStack = () => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator />
       </View>
-    ); // Insert loading indicator
+    ); 
   }
 
   return (

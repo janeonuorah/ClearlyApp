@@ -103,9 +103,8 @@ const NoOnboardingStack = () => {
 const MainStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="HomeScreen" component={BottomTabs} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="BottomTabs" component={BottomTabs} />
       <Stack.Screen name="PersonalProfile" component={PersonalProfile} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ResetPassword1" component={ResetPassword1} />
@@ -122,6 +121,7 @@ const MainStack = () => {
       <Stack.Screen name="CommunityScreen" component={Community} />
       <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
+    
   );
 };
 

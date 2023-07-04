@@ -5,27 +5,88 @@ import {
     Image,
     TextInput,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
 import { COLORS, height, width } from '../components/styles';
 import { useNavigation } from '@react-navigation/native';
+import { DataContext } from '../components/UserData';
 
 
 const ResetPassword2 = () => {
+    const [hidePassword, setHidePassword] = useState(true)
     const [newPassword, setNewPassword] = useState('');
-    const [confirmedPassword, setConfirmedPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const { data } = useContext(DataContext)
+
+    const onEyePress = () => { setHidePassword(!hidePassword) }
+
+    const handlePasswordBackspace1 = () => {
+        handleNewPassword(newPassword.slice(0, -1));
+    };
+
+    const handlePasswordBackspace = () => {
+        handleConfirmPassword(confirmPassword.slice(0, -1));
+    };
 
     const handleNewPassword = (text) => {
         setNewPassword(text);
     };
 
-    const handleConfirmedPassword = (text) => {
-        setConfirmedPassword(text);
+    const handleConfirmPassword = (text) => {
+        setConfirmPassword(text);
     };
 
     const navigation = useNavigation();
+
+    //API integration
+    const onResetPasswordPress = async () => {
+
+        if (newPassword !== confirmPassword) {
+            Alert.alert('Error', 'New password and confirmed password do not match');
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                'https://backend-nyux.onrender.com/api/v1/users/resetPassword',
+                { email: data.email, confirmPassword, newPassword },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            // Handle the response
+            console.log(response.data);
+
+            if (response.data.message === 'Password updated successfully') {
+                // Password updated successfully
+                console.log('Password updated successfully');
+                Alert.alert('Success', 'Your password has been changed successfully. Please log in with your new details')
+                navigation.navigate("LogIn")
+            }
+            else {
+                // Failed to update password
+                console.log('Failed to update password');
+            }
+        }
+        catch (error) {
+            // Handle error responses from the API
+            console.log(error.response.status);
+            console.log(error.response.data);
+
+            // Show an error message to the user
+            if (error.response.status === 500) {
+                console.log('Failed to update password');
+                Alert.alert('Try again')
+            }
+        }
+    }
 
     return (
         <SafeAreaView
@@ -60,20 +121,56 @@ const ResetPassword2 = () => {
                 </Text>
             </View>
 
-            <View>
+            <View style={styles.input}>
                 <TextInput
+                    secureTextEntry={hidePassword}
                     placeholder="New Password"
+                    autoCorrect={false}
                     value={newPassword}
                     onChangeText={handleNewPassword}
-                    style={styles.textInput}
+                    style={{
+                        flex: 1,
+                        paddingHorizontal: 10,
+                        fontSize: 17
+                    }}
+                    onKeyPress={({ nativeEvent }) => {
+                        if (nativeEvent.key === 'Backspace') {
+                            handlePasswordBackspace1();
+                        }
+                    }}
                 />
-                <TextInput
-                    placeholder="Confirmed Password"
-                    value={confirmedPassword}
-                    onChangeText={handleConfirmedPassword}
-                    style={styles.textInput}
+                <Icon
+                    name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
+                    style={styles.passwordEye}
+                    onPress={onEyePress}
                 />
             </View>
+
+            <View style={styles.input}>
+                <TextInput
+                    secureTextEntry={hidePassword}
+                    placeholder="Confirmed Password"
+                    autoCorrect={false}
+                    value={confirmPassword}
+                    onChangeText={handleConfirmPassword}
+                    style={{
+                        flex: 1,
+                        paddingHorizontal: 10,
+                        fontSize: 17
+                    }}
+                    onKeyPress={({ nativeEvent }) => {
+                        if (nativeEvent.key === 'Backspace') {
+                            handlePasswordBackspace();
+                        }
+                    }}
+                />
+                <Icon
+                    name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
+                    style={styles.passwordEye}
+                    onPress={onEyePress}
+                />
+            </View>
+
 
             <TouchableOpacity
                 style={{
@@ -86,7 +183,7 @@ const ResetPassword2 = () => {
                     backgroundColor: COLORS.primary,
                     marginHorizontal: 50,
                 }}
-                onPress={() => navigation.navigate('PasswordChanged')}
+                onPress={onResetPasswordPress}
             >
                 <Text
                     style={{
@@ -95,7 +192,7 @@ const ResetPassword2 = () => {
                         color: COLORS.white,
                     }}
                 >
-                   Reset Password
+                    Reset Password
                 </Text>
             </TouchableOpacity>
 
@@ -121,7 +218,24 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         fontSize: 18,
         fontWeight: '500'
-    }
+    },
+
+    input: {
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: COLORS.primary,
+        padding: 10,
+        marginTop: 30,
+        alignSelf: 'center',
+        width: '85%',
+        height: '6%',
+        flexDirection: 'row',
+    },
+
+    passwordEye: {
+        fontSize: 22,
+        color: 'grey',
+    },
 })
 
 export default ResetPassword2

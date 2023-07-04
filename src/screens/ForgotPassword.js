@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
     View,
     Text,
@@ -7,19 +7,21 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    Image
+    Image,
+    Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 
 import { height, COLORS } from '../components/styles';
+import { DataContext } from '../components/UserData';
 
 const ForgotPassword = () => {
-
-    const [phone, setPhone] = useState()
-    const [email, setEmail] = useState()
-    const [otpSent, setOtpSent] = useState()
+    // const [phone, setPhone] = useState('')
+    const [email, setEmail] = useState('')
+    const {data, setData} = useContext(DataContext)
 
     const navigation = useNavigation()
 
@@ -29,8 +31,58 @@ const ForgotPassword = () => {
     }
 
     {/* function to handle Next button press depending on user's choice*/ }
-    const onNextButtonPress = () => {
-        navigation.navigate('ResetPassword1')
+    const onNextButtonPress = async () => {
+        if (email.length === 0) {
+            Alert.alert('Error', 'Please enter your email.');
+            return;
+        }
+
+        // Function to validate email format
+        const validateEmail = (email) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        };
+
+        // Validate email format
+        if (!validateEmail(email)) {
+            Alert.alert('Error', 'Please enter a valid email address.');
+            return;
+        }
+
+        setData({...data, email})
+
+        try {
+            const response = await axios.post(
+                'https://backend-nyux.onrender.com/api/v1/users/forgotpassword',
+                { email },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            // Handle the response and update your app's state or UI accordingly
+            console.log(response.data);
+
+            // Show a success message to the user indicating that the password reset email has been sent
+            Alert.alert('Success', 'Password reset verification email has been sent.');
+
+            // Navigate to the appropriate screen, e.g., a screen where users can enter the reset token/code
+            navigation.navigate('ResetPassword1');
+        }
+
+        catch (error) {
+            // Handle error responses from the API
+            console.log(error.response.status);
+            // Check if the error message indicates an existing user
+            if (error.response && error.response.status === 400) {
+                Alert.alert('Error', 'User does not exist.');
+            }
+            else {
+                Alert.alert('Error', 'Failed to send OTP. Please try again.');
+            }
+        }
     }
 
     return (
@@ -68,11 +120,11 @@ const ForgotPassword = () => {
                 <View style={{ alignItems: 'center', marginTop: 30 }}>
                     <View>
                         <Text style={styles.forgotPassword}>Forgot Password?</Text>
-                        <Text style={styles.chooseText}>Choose your preferred mode to reset your password</Text>
+                        <Text style={styles.chooseText}>Enter your registered email and new password to reset your password</Text>
                     </View>
                 </View>
 
-                {/* phoneinput */}
+                {/* phoneinput
                 <View style={styles.input}>
                     <TextInput
                         placeholder="Phone"
@@ -83,9 +135,9 @@ const ForgotPassword = () => {
                         onChangeText={setPhone}
                         style={{ flex: 1, paddingRight: 10, fontSize: 18, fontWeight: '500' }}
                     />
-                </View>
+                </View> */}
 
-                {/* divider */}
+                {/* divider 
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -96,7 +148,7 @@ const ForgotPassword = () => {
                     <View style={styles.line} />
                     <Text style={styles.orText}>or</Text>
                     <View style={styles.line} />
-                </View>
+                </View> */}
 
                 {/* emailinput */}
                 <View style={[styles.input, { marginTop: 30 }]}>
@@ -104,8 +156,8 @@ const ForgotPassword = () => {
                         placeholder="Email"
                         autoCorrect={false}
                         value={email}
-                        onChangeText={setEmail}
-                        style={{ flex: 1, paddingRight: 10, fontSize: 18, fontWeight: '500' }}
+                        onChangeText={text => setEmail(text.toLowerCase())}
+                        style={{ flex: 1, paddingRight: 10, fontSize: 18 }}
                     />
                 </View>
 
@@ -180,6 +232,12 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: '500',
         color: COLORS.white,
+    },
+
+    passwordEye: {
+        fontSize: 22,
+        color: 'grey',
+        alignSelf: 'center'
     },
 })
 

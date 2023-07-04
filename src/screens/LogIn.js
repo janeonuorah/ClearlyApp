@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
     View,
     Text,
@@ -7,19 +7,99 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
 import { height, COLORS, width } from '../components/styles';
 import LoginButton from '../components/loginButtons';
 import { useNavigation } from '@react-navigation/native';
+import { DataContext } from '../components/UserData';
 
 const LogIn = ({ error }) => {
     const [hidePassword, setHidePassword] = useState(true)
     const [rememberMe, setRememberMe] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const { data, setData } = useContext(DataContext)
+    const navigation = useNavigation()
+
+    //handle login press
+    const onLoginPress = async () => {
+
+        if (email.length === 0 && password.length === 0) {
+            Alert.alert('Error', 'Please enter your details.');
+            return;
+        }
+
+
+        if (email.length !== 0 && password.length === 0) {
+            Alert.alert('Error', 'Please enter your password.');
+            return;
+        }
+
+        // Function to validate email format
+        const validateEmail = (email) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        };
+
+        // Validate email format
+        if (!validateEmail(email)) {
+            Alert.alert('Error', 'Please enter a valid email address.');
+            return;
+        }
+
+
+        //API implementation to handle login
+        try {
+            const response = await axios.post(
+                'https://backend-nyux.onrender.com/api/v1/users/login',
+                { email, password },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            console.log(response.data);
+            // Check if the response contains the necessary data indicating a successful login
+            if (response.data && response.data.status === 'Success') {
+                // Handle successful login
+                // For example, you can store the user token in AsyncStorage or Redux store,
+                // navigate to the home screen, etc.
+                navigation.navigate('HomeScreenAlso');
+            }
+            else {
+                // Handle unexpected response data
+                Alert.alert('Error', 'Failed to login. Please try again.');
+            }
+
+        }
+
+        catch (error) {
+            console.log(error.response.status);
+            console.log(error.response.data);
+            console.log(error.response.data.message)
+
+            if (error.response && error.response.message === 'username, email does not exist') {
+                // User does not exist
+                Alert.alert('Error', 'User does not exist. Please sign up first.');
+            }
+            else if (error.response && error.response.status === 502) {
+                // Login failed due to wrong email, password, or username
+                Alert.alert('Error', 'Wrong email or password Please try again.');
+            }
+            else {
+                // Other error occurred during login
+                Alert.alert('Error', 'Failed to login. Please try again.');
+            }
+        };
+    }
+
 
     useEffect(() => {
         retrieveSavedEmail();
@@ -69,16 +149,10 @@ const LogIn = ({ error }) => {
         }
     }
 
-    const onLoginPress = () => {
-        navigation.navigate('HomeScreenAlso')
-    }
-
     // function to handle clearing of password one charcter at a time
     const handlePasswordBackspace = () => {
         setPassword(password.slice(0, -1));
     };
-
-    const navigation = useNavigation()
 
     const onForgotPasswordPress = () => {
         navigation.navigate('ForgotPassword')
@@ -125,7 +199,7 @@ const LogIn = ({ error }) => {
                         autoCorrect={false}
                         keyboardType='email-address'
                         value={email}
-                        onChangeText={setEmail}
+                        onChangeText={text => setEmail(text.toLowerCase())}
                         style={{
                             flex: 1,
                             paddingHorizontal: 10,
@@ -144,16 +218,18 @@ const LogIn = ({ error }) => {
                         secureTextEntry={hidePassword}
                         placeholder="Password"
                         autoCorrect={false}
+                        value={password}
                         onKeyPress={({ nativeEvent }) => {
                             if (nativeEvent.key === 'Backspace') {
                                 handlePasswordBackspace();
                             }
                         }}
-                        style={{ 
-                            flex: 1, 
+                        style={{
+                            flex: 1,
                             paddingHorizontal: 10,
                             fontSize: 17
                         }}
+                        onChangeText={setPassword}
                     />
                     <Icon
                         name={hidePassword ? 'eye-outline' : 'eye-off-outline'}
@@ -207,7 +283,7 @@ const LogIn = ({ error }) => {
                             marginTop: 190
                         },
                         android: {
-                           marginTop: 170
+                            marginTop: 170
                         },
                     }),
                 }}
@@ -231,7 +307,6 @@ const styles = StyleSheet.create({
 
     input: {
         borderWidth: 1,
-        borderRadius: 5,
         borderColor: COLORS.white,
         paddingHorizontal: 10,
         marginTop: 30,

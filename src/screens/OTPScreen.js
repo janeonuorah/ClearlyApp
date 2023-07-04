@@ -9,55 +9,118 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
-    Keyboard
+    Keyboard,
+    Dimensions,
+    Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-// import { KeyboardAccessoryView } from 'react-native-keyboard-accessory'
-
 import { height, COLORS, width } from '../components/styles';
 
-const OTPScreen = () => {
-    const [otp, setOtp] = useState('');
-    const [keyboardOffset, setKeyboardOffset] = useState(0)
+const OTPScreen = ({ route }) => {
+    const receivedOTP = route.params?.receivedOTP
 
-    const handleOTPSubmit = () => {
-        // Implement logic to verify the entered OTP
-        console.log('Entered OTP:', otp);
+    const [Tokennumber, onChangeText] = React.useState('');
+    const [keyboardOffset, setKeyboardOffset] = useState(0);
+    const navigation = useNavigation();
+
+    const handleChangeText = (text) => {
+        onChangeText(text)
+    }
+
+    const handleBackButtonPress = () => {
+        navigation.goBack();
     };
 
-    const handleDoneButtonPress = () => {
-        console.log('Hey');
+    //on confirm button press
+    const handleOTPSubmit = async () => {
+        if (Tokennumber.length === 0) {
+            Alert.alert('Error', 'Please input the 6-digit code that was sent to your email');
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                'https://backend-nyux.onrender.com/api/v1/users/verifyToken',
+                { token: Tokennumber },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            // Handle the response and update your app's state or UI accordingly
+            console.log(response.data);
+
+            // Check if the token verification is successful
+            if (response.data.status === "success") {
+                // Show a success message to the user indicating that the token is verified
+                Alert.alert('Success', 'Token verification successful.');
+
+                // Navigate to the appropriate screen for resetting the password
+                navigation.navigate('LogIn');
+            }
+            else {
+                // Show an error message if the token verification failed
+                Alert.alert('Error', 'Invalid token. Please check the entered code.');
+            }
+        }
+
+        catch (error) {
+            // Handle error responses from the API
+            console.log(error);           
+                Alert.alert('Error', 'Invalid Code. Please try again.');
+         
+
+        };
     }
 
-    const navigation = useNavigation()
 
-    {/* function to handle back button press*/ }
-    const handleBackButtonPress = () => {
-        navigation.goBack()
-    }
+    //onresend code press
+    const handleResendCode = async () => {
+        try {
+            // Make an API call to resend the OTP
+            const response = await axios.post(
+                //request api to handle resend otp
+                'https://backend-nyux.onrender.com/api/v1/users/sendVerificationCode',
+                { email: route.params?.email },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
-    const onConfirmPress = () => {
-        navigation.navigate('PersonalProfile')
-    }
+            // Handle the response and show a success message
+            console.log(response.data);
+            Alert.alert('Success', 'OTP has been resent to your email address.');
+        }
+        catch (error) {
+            // Handle error responses from the API
+            console.log(error.response.data);
+            Alert.alert('Error', 'Failed to resend OTP. Please try again.');
+        }
+    };
 
 
     useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-            (e) => {
-                if (Platform.OS === 'ios') {
-                    setKeyboardOffset(e.endCoordinates.height);
-                } else {
-                    const screenHeight = Dimensions.get('window').height;
-                    const keyboardHeight = e.endCoordinates.height;
-                    const offset = screenHeight - keyboardHeight - height * 0.95;
-                    setKeyboardOffset(offset);
-                }
+        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
+            if (Platform.OS === 'ios') {
+                setKeyboardOffset(e.endCoordinates.height);
+            } else {
+                const screenHeight = Dimensions.get('window').height;
+                const keyboardHeight = e.endCoordinates.height;
+                const offset = screenHeight - keyboardHeight - height * 0.95;
+                setKeyboardOffset(offset);
             }
+        });
 
-        );
+        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+            setKeyboardOffset(0);
+        });
 
         return () => {
             keyboardDidShowListener.remove();
@@ -65,13 +128,9 @@ const OTPScreen = () => {
         };
     }, []);
 
-
-    const keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-            setKeyboardOffset(0);
-        }
-    );
+    const handleDoneButtonPress = () => {
+        Keyboard.dismiss();
+    };
 
     return (
         <SafeAreaView style={{ backgroundColor: COLORS.white }}>
@@ -81,9 +140,8 @@ const OTPScreen = () => {
                     resizeMode: 'cover',
                     width: '100%',
                     height: height * 0.95,
-                }}>
-
-                {/* back icon */}
+                }}
+            >
                 <Icon
                     name='arrow-left'
                     style={{
@@ -101,26 +159,21 @@ const OTPScreen = () => {
                         height: '28%',
                         alignSelf: 'center',
                         backgroundColor: COLORS.white,
-                        marginTop: 10
-                    }} />
+                        marginTop: 10,
+                    }}
+                />
 
-                {/* reset password header */}
                 <View style={{ alignItems: 'center', marginTop: 30 }}>
                     <View>
                         <Text style={styles.inputText}>Enter the 6 digits code we sent to your number</Text>
                     </View>
                 </View>
 
-                {/* <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                    style={{ flex: 1 }}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50}> */}
-
                 <OTPInputView
                     style={[styles.otpInput, { marginBottom: keyboardOffset }]}
                     pinCount={6}
-                    code={otp}
-                    onCodeChanged={code => setOtp(code)}
+                    code={Tokennumber}
+                    onCodeChanged={handleChangeText}
                     autoFocusOnLoad
                     codeInputFieldStyle={styles.otpInputField}
                     codeInputHighlightStyle={styles.otpInputHighlight}
@@ -129,49 +182,36 @@ const OTPScreen = () => {
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                     <Text>Didn't receive code? Click</Text>
-                    <TouchableOpacity>
-                        <Text style={{color: COLORS.primary}}>
+                    <TouchableOpacity
+                        onPress={handleResendCode}>
+                        <Text style={{ color: COLORS.primary }}>
                             Resend Code
                         </Text>
                     </TouchableOpacity>
                 </View>
-                {/* <KeyboardAccessoryView
-                        alwaysVisible
-                        hideBorder
-                        style={styles.accessoryContainer}> */}
-                {/* <View style={styles.doneButtonContainer}>
+
+                {Platform.OS === 'ios' && keyboardOffset > 0 && (
+                    <KeyboardAvoidingView behavior='padding' style={styles.accessoryContainer}>
+                        <View style={styles.doneButtonContainer}>
                             <TouchableOpacity onPress={handleDoneButtonPress}>
                                 <Text style={styles.doneButton}>Done</Text>
                             </TouchableOpacity>
-                        </View> */}
-                {/* </KeyboardAccessoryView> */}
+                        </View>
+                    </KeyboardAvoidingView>
+                )}
 
-
-                {/* Next button */}
                 <TouchableOpacity
                     style={styles.nextContainer}
-                    onPress={() => { handleOTPSubmit(), onConfirmPress() }}
+                    onPress={() => { handleOTPSubmit(); }}
                 >
                     <Text style={styles.nextText}>Confirm</Text>
                 </TouchableOpacity>
-                {/* </KeyboardAvoidingView> */}
-
-
             </ImageBackground>
         </SafeAreaView>
-
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
-    resetPassword: {
-        alignSelf: 'center',
-        lineHeight: 29,
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginTop: 20,
-    },
-
     inputText: {
         color: COLORS.grey,
         fontSize: 18,
@@ -183,7 +223,7 @@ const styles = StyleSheet.create({
         width: width * 0.8,
         height: 100,
         alignSelf: 'center',
-        marginTop: 10
+        marginTop: 10,
     },
 
     otpInputField: {
@@ -206,11 +246,12 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: '#80CAFF',
         borderRadius: 5,
-        paddingHorizontal: 120,
         paddingVertical: 10,
         backgroundColor: COLORS.primary,
         marginHorizontal: 50,
-        marginTop: 30
+        marginTop: 30,
+        justifyContent: 'center',
+        minWidth: 200,
     },
 
     accessoryContainer: {
@@ -240,6 +281,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: COLORS.white,
     },
-})
+});
 
-export default OTPScreen
+export default OTPScreen;
